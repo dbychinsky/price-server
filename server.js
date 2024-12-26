@@ -1,21 +1,25 @@
 const express = require('express');
 const app = express();
-const cors = require('cors');
-const urlGoods = `https://www.wildberries.by/catalog/180954182/detail.aspx?targetUrl=SN`;
-// const urlGoods = `https://jsonplaceholder.typicode.com/users`;
-
-app.use(cors());
-
 const axios = require('axios');
 const PORT = 3000;
+// const targetUrl = `https://card.wb.ru/cards/v2/detail?curr=byn&dest=-59202&nm=250909718`;
+const targetUrl = `https://card.wb.ru/cards/v2/detail?curr=byn&dest=-59202&nm=`;
 
-app.get('/fetch-data', async (req, res) => {
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+app.get(`/`, async (req, res) => {
+    const id = req.query.id;
+
     try {
         // Замените URL на адрес сервера, с которого вы хотите получить данные
-        const response = await axios.get(urlGoods);
+        const response = await axios.get(`${targetUrl}${id}`);
 
         // Отправляем полученные данные в формате JSON
-        res.json(response.data);
+        res.json(response.data.data.products[0]);
     } catch (error) {
         console.error('Ошибка при получении данных:', error);
         res.status(500).json({error: 'Ошибка при получении данных'});
