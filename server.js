@@ -2,8 +2,7 @@ const express = require('express');
 const app = express();
 const axios = require('axios');
 const PORT = 3000;
-// const targetUrl = `https://card.wb.ru/cards/v2/detail?curr=byn&dest=-59202&nm=250909718`;
-const targetUrl = `https://card.wb.ru/cards/v2/detail?curr=byn&dest=-59202&nm=`;
+const apiUrl = `https://card.wb.ru/cards/v2/detail?curr=byn&dest=-59202&nm=`
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -16,7 +15,7 @@ app.get(`/`, async (req, res) => {
 
     try {
         // Замените URL на адрес сервера, с которого вы хотите получить данные
-        const response = await axios.get(`${targetUrl}${id}`);
+        const response = await axios.get(`${apiUrl}${id}`);
 
         // Отправляем полученные данные в формате JSON
         res.json(response.data.data.products[0]);
