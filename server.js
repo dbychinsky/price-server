@@ -1,34 +1,27 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const urlGoods = `https://www.wildberries.by/catalog/180954182/detail.aspx?targetUrl=SN`;
+// const urlGoods = `https://jsonplaceholder.typicode.com/users`;
 
-app.use(cors())
+app.use(cors());
 
-app.get('/', (req, res) => {
-    res.send({
-        "glossary": {
-            "title": "example glossary",
-            "GlossDiv": {
-                "title": "S",
-                "GlossList": {
-                    "GlossEntry": {
-                        "ID": "SGML",
-                        "SortAs": "SGML",
-                        "GlossTerm": "Standard Generalized Markup Language",
-                        "Acronym": "SGML",
-                        "Abbrev": "ISO 8879:1986",
-                        "GlossDef": {
-                            "para": "A meta-markup language, used to create markup languages such as DocBook.",
-                            "GlossSeeAlso": ["GML", "XML"]
-                        },
-                        "GlossSee": "markup"
-                    }
-                }
-            }
-        }
-    });
-})
+const axios = require('axios');
+const PORT = 3000;
 
-app.listen(8080, () => {
-    console.log('server listening on port 8080')
-})
+app.get('/fetch-data', async (req, res) => {
+    try {
+        // Замените URL на адрес сервера, с которого вы хотите получить данные
+        const response = await axios.get(urlGoods);
+
+        // Отправляем полученные данные в формате JSON
+        res.json(response.data);
+    } catch (error) {
+        console.error('Ошибка при получении данных:', error);
+        res.status(500).json({error: 'Ошибка при получении данных'});
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Сервер запущен на http://localhost:${PORT}`);
+});
